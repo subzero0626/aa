@@ -93,6 +93,49 @@
             font-size: 1.4em;
         }
 
+        body.is-mobile.mobile-hub-active #settingsPanel {
+            position: static;
+            top: auto;
+            left: auto;
+            transform: none;
+            transform-origin: center;
+            width: 100%;
+        }
+
+        body.is-mobile.mobile-hub-active #settingsPanel .settings-toggle {
+            display: none;
+        }
+
+        body.is-mobile.mobile-hub-active #settingsPanel .settings-card {
+            display: flex;
+            width: 100%;
+            position: static;
+        }
+
+        body.is-mobile.mobile-hub-active #coinBuffContainer {
+            position: static;
+            transform: none;
+            width: 100%;
+        }
+
+        body.is-mobile.mobile-hub-active #coinBuffContainer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        body.is-mobile.mobile-hub-active #coinBuffContainer .coin-stack {
+            width: 100%;
+            align-items: stretch;
+        }
+
+        body.is-mobile.mobile-hub-active #coinBuffContainer #coinDisplay {
+            width: 100%;
+        }
+
+        body.is-mobile.mobile-hub-active #coinBuffContainer .buff-panel {
+            width: 100%;
+        }
+
         .device-mode-settings {
             display: flex;
             flex-direction: column;
@@ -137,12 +180,9 @@
             border-radius: 999px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
-            font-size: 0.78em;
-            font-weight: 700;
-            color: #475569;
-            transition: background 0.25s ease, color 0.25s ease;
+            justify-content: center;
+            padding: 0 10px;
+            transition: background 0.25s ease;
             pointer-events: none;
         }
 
@@ -160,31 +200,8 @@
             pointer-events: none;
         }
 
-        .device-toggle-option {
-            z-index: 2;
-            pointer-events: none;
-            transition: color 0.25s ease;
-        }
-
-        .device-toggle-option.option-desktop {
-            color: #1e293b;
-        }
-
-        .device-toggle-option.option-mobile {
-            color: #94a3b8;
-        }
-
         .device-toggle input:checked + .device-toggle-track {
             background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .device-toggle input:checked + .device-toggle-track .option-desktop {
-            color: rgba(255, 255, 255, 0.68);
-        }
-
-        .device-toggle input:checked + .device-toggle-track .option-mobile {
-            color: #ffffff;
         }
 
         .device-toggle input:checked ~ .device-toggle-thumb {
@@ -1878,7 +1895,7 @@
         }
 
         /* 아이템 보관소 전용 스타일 */
-        .item-storage-screen .container {
+        .item-storage-screen .storage-card {
             max-width: 1500px;
             width: 95%;
             padding: 48px 52px;
@@ -1896,7 +1913,7 @@
             margin-bottom: 100px;
         }
 
-        .item-storage-screen .container h1 {
+        .item-storage-screen .storage-card h1 {
             margin: 0;
             font-size: 2.6em;
             color: #1f2933;
@@ -1915,6 +1932,67 @@
             max-height: 520px;
             overflow-y: auto;
             padding-right: 6px;
+        }
+
+        .storage-mobile-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 32px;
+            width: 100%;
+        }
+
+        .storage-mobile-layout .storage-card {
+            flex: 1 1 0;
+        }
+
+        .mobile-hub-card {
+            flex: 1 1 0;
+            display: none;
+            padding: 36px 40px;
+            gap: 20px;
+            transform: none;
+            margin: 0;
+        }
+
+        .mobile-hub-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            width: 100%;
+        }
+        .mobile-hub-title {
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: 800;
+            color: #1f2937;
+        }
+
+        .mobile-hub-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .mobile-hub-section > * {
+            width: 100%;
+        }
+
+        body.is-mobile .storage-mobile-layout {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        body.is-mobile.mobile-hub-active .mobile-hub-card {
+            display: flex;
+            max-width: 100%;
+        }
+
+        body.is-mobile .storage-card {
+            transform: none;
+            margin-top: 0;
+            margin-bottom: 0;
+            max-width: 100%;
         }
 
         .item-storage-screen .storage-row {
@@ -2688,17 +2766,14 @@
                 <div class="settings-section-title">화면 모드</div>
                 <div class="settings-section-content device-mode-settings">
                     <div class="settings-device-row">
-                        <div class="device-mode-label">PC / 모바일 보기 전환</div>
+                        <div class="device-mode-label">모바일 모드</div>
                         <div class="device-toggle">
-                            <input type="checkbox" id="deviceModeToggle" role="switch" aria-checked="false" aria-label="PC와 모바일 보기 전환">
-                            <div class="device-toggle-track">
-                                <span class="device-toggle-option option-desktop">PC</span>
-                                <span class="device-toggle-option option-mobile">모바일</span>
-                            </div>
+                            <input type="checkbox" id="deviceModeToggle" role="switch" aria-checked="false" aria-label="모바일 모드 강제 전환">
+                            <div class="device-toggle-track"></div>
                             <div class="device-toggle-thumb"></div>
                         </div>
                     </div>
-                    <div class="device-mode-caption">슬라이더가 파란색일 때는 모바일 모드예요.</div>
+                    <div class="device-mode-caption">슬라이더가 파란색일 땐 모바일 모드를 강제로 적용합니다.</div>
                     <div class="device-mode-hint" id="deviceModeHint">현재 화면: 자동 감지 중</div>
                     <button type="button" class="device-mode-reset" id="deviceModeReset" disabled>자동 감지 복원</button>
                 </div>
@@ -2717,12 +2792,21 @@
     <div class="main-container" id="mainContainer">
         <!-- 아이템 보관소 화면 (맨 왼쪽) -->
         <div class="screen storage-container item-storage-screen">
-            <div class="container">
-                <h1>📦 아이템 보관소</h1>
-                <p class="storage-subtitle">보관 중인 아이템을 한눈에 확인하고 관리하세요.</p>
-                <div id="itemStorageContent">
-                    <div class="storage-list" id="itemStorageList">
-                        <p>아이템이 없습니다.</p>
+            <div class="storage-mobile-layout">
+                <div class="container storage-card">
+                    <h1>📦 아이템 보관소</h1>
+                    <p class="storage-subtitle">보관 중인 아이템을 한눈에 확인하고 관리하세요.</p>
+                    <div id="itemStorageContent">
+                        <div class="storage-list" id="itemStorageList">
+                            <p>아이템이 없습니다.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container mobile-hub-card">
+                    <h2 class="mobile-hub-title">📱 모바일 HUD</h2>
+                    <div class="mobile-hub-wrapper">
+                        <div class="mobile-hub-section" id="mobileSettingsSlot"></div>
+                        <div class="mobile-hub-section" id="mobileCoinSlot"></div>
                     </div>
                 </div>
             </div>
@@ -2867,12 +2951,84 @@
             return layoutOverride === 'mobile' || layoutOverride === 'desktop';
         }
 
+        function rememberMobileHudAnchors() {
+            if (!settingsPanelOriginalParent) {
+                const panel = document.getElementById('settingsPanel');
+                if (panel) {
+                    settingsPanelOriginalParent = panel.parentElement;
+                    settingsPanelOriginalNextSibling = panel.nextElementSibling;
+                }
+            }
+            if (!coinBuffOriginalParent) {
+                const coinContainer = document.getElementById('coinBuffContainer');
+                if (coinContainer) {
+                    coinBuffOriginalParent = coinContainer.parentElement;
+                    coinBuffOriginalNextSibling = coinContainer.nextElementSibling;
+                }
+            }
+        }
+
+        function mountMobileHud() {
+            if (mobileHudMounted) return;
+            rememberMobileHudAnchors();
+            const panel = document.getElementById('settingsPanel');
+            const coinContainer = document.getElementById('coinBuffContainer');
+            const settingsSlot = document.getElementById('mobileSettingsSlot');
+            const coinSlot = document.getElementById('mobileCoinSlot');
+            if (panel && settingsSlot) {
+                settingsPanelWasOpenBeforeMobile = panel.classList.contains('open');
+                settingsSlot.appendChild(panel);
+                panel.classList.add('open');
+            }
+            if (coinContainer && coinSlot) {
+                coinSlot.appendChild(coinContainer);
+            }
+            document.body.classList.add('mobile-hub-active');
+            mobileHudMounted = true;
+        }
+
+        function unmountMobileHud() {
+            if (!mobileHudMounted) return;
+            const panel = document.getElementById('settingsPanel');
+            const coinContainer = document.getElementById('coinBuffContainer');
+            if (panel && settingsPanelOriginalParent) {
+                if (settingsPanelOriginalNextSibling) {
+                    settingsPanelOriginalParent.insertBefore(panel, settingsPanelOriginalNextSibling);
+                } else {
+                    settingsPanelOriginalParent.appendChild(panel);
+                }
+                if (!settingsPanelWasOpenBeforeMobile) {
+                    panel.classList.remove('open');
+                }
+            }
+            if (coinContainer && coinBuffOriginalParent) {
+                if (coinBuffOriginalNextSibling) {
+                    coinBuffOriginalParent.insertBefore(coinContainer, coinBuffOriginalNextSibling);
+                } else {
+                    coinBuffOriginalParent.appendChild(coinContainer);
+                }
+            }
+            document.body.classList.remove('mobile-hub-active');
+            mobileHudMounted = false;
+            settingsPanelWasOpenBeforeMobile = false;
+        }
+
+        function updateMobileHudMount(forceMode) {
+            const targetMode = forceMode || getPreferredLayoutMode();
+            if (targetMode === 'mobile') {
+                mountMobileHud();
+            } else {
+                unmountMobileHud();
+            }
+        }
+
         function applyResponsiveLayout() {
             if (!document.body) return;
             const targetMode = getPreferredLayoutMode();
             const isMobile = targetMode === 'mobile';
             document.body.classList.toggle('is-mobile', isMobile);
             document.body.dataset.deviceMode = targetMode;
+            updateMobileHudMount(targetMode);
             const html = document.documentElement;
             if (isMobile) {
                 const viewportWidth = window.innerWidth;
@@ -2957,6 +3113,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             bindLayoutToggle();
+            rememberMobileHudAnchors();
             updateLayoutToggleUI();
             applyResponsiveLayout();
         });
@@ -3202,6 +3359,12 @@
          let nameChangedItems = []; // 이름이 바뀐 아이템들 (변환기 효과)
          let nameChangeTimer = null; // 이름 변경 효과 타이머
         let layoutOverride = null; // 'mobile' | 'desktop' | null(자동)
+        let settingsPanelOriginalParent = null;
+        let settingsPanelOriginalNextSibling = null;
+        let coinBuffOriginalParent = null;
+        let coinBuffOriginalNextSibling = null;
+        let mobileHudMounted = false;
+        let settingsPanelWasOpenBeforeMobile = false;
 
         function getWeekendBuff() {
             return activeBuffs.find(buff => buff.type === 'weekend');
