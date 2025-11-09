@@ -985,7 +985,7 @@
             color: #475569;
             transition: all 0.35s ease;
             box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
-            width: min(420px, 100%);
+            width: min(420px, 80vw);
         }
 
         .result-display.reset {
@@ -2919,6 +2919,34 @@
                 if (Math.abs(scaled - Math.round(scaled)) < 1e-9) {
                     const fixed = num.toFixed(k);
                     return fixed.replace(/\.?0+$/, '');
+                }
+            }
+            const fixed = Math.abs(num).toFixed(12);
+            if (!fixed.includes('.')) return String(num);
+            const [intPartStr, rawDecimal] = fixed.split('.');
+            let decimals = rawDecimal.replace(/0+$/, '');
+            if (!decimals) {
+                return (num < 0 ? '-' : '') + intPartStr;
+            }
+            for (let len = 1; len <= Math.min(6, Math.floor(decimals.length / 2)); len++) {
+                const pattern = decimals.slice(0, len);
+                if (/^0+$/.test(pattern)) continue;
+                let isRepeating = true;
+                for (let i = 0; i < decimals.length; i += len) {
+                    const segment = decimals.slice(i, i + len);
+                    const expected = pattern.slice(0, segment.length);
+                    if (segment !== expected) {
+                        isRepeating = false;
+                        break;
+                    }
+                }
+                if (isRepeating) {
+                    const sign = num < 0 ? '-' : '';
+                    const trimmedPattern = pattern.replace(/0+$/, '') || pattern;
+                    const result = trimmedPattern
+                        ? `${sign}${intPartStr}.${trimmedPattern}`
+                        : `${sign}${intPartStr}`;
+                    return result.replace(/\.$/, '');
                 }
             }
             return num.toFixed(3) + '...';
