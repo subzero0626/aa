@@ -136,136 +136,6 @@
             pointer-events: auto;
         }
 
-        .device-mode-settings {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .settings-device-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .device-mode-label {
-            font-weight: 700;
-            color: #334155;
-            font-size: 0.95em;
-        }
-
-        .device-toggle {
-            position: relative;
-            width: 92px;
-            height: 34px;
-        }
-
-        .device-toggle input {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 3;
-            margin: 0;
-        }
-
-        .device-toggle-track {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cfd8e3 100%);
-            border-radius: 999px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 12px;
-            font-size: 0.78em;
-            font-weight: 700;
-            color: #475569;
-            transition: background 0.25s ease, color 0.25s ease;
-            pointer-events: none;
-        }
-
-        .device-toggle-thumb {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 42px;
-            height: 26px;
-            border-radius: 999px;
-            background: #ffffff;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
-            transition: transform 0.25s ease;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .device-toggle-option {
-            z-index: 2;
-            pointer-events: none;
-            transition: color 0.25s ease;
-        }
-
-        .device-toggle-option.option-desktop {
-            color: #1e293b;
-        }
-
-        .device-toggle-option.option-mobile {
-            color: #94a3b8;
-        }
-
-        .device-toggle input:checked + .device-toggle-track {
-            background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .device-toggle input:checked + .device-toggle-track .option-desktop {
-            color: rgba(255, 255, 255, 0.68);
-        }
-
-        .device-toggle input:checked + .device-toggle-track .option-mobile {
-            color: #ffffff;
-        }
-
-        .device-toggle input:checked ~ .device-toggle-thumb {
-            transform: translateX(42px);
-        }
-
-        .device-mode-hint {
-            font-size: 0.82em;
-            color: #64748b;
-        }
-
-        .device-mode-caption {
-            font-size: 0.78em;
-            color: #5b6b85;
-        }
-
-        .device-mode-reset {
-            align-self: flex-end;
-            border: none;
-            background: rgba(96, 165, 250, 0.16);
-            color: #1d4ed8;
-            font-weight: 600;
-            padding: 8px 14px;
-            border-radius: 999px;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease;
-        }
-
-        .device-mode-reset:hover:not(:disabled) {
-            background: rgba(59, 130, 246, 0.25);
-            color: #1e3a8a;
-        }
-
-        .device-mode-reset:disabled {
-            cursor: default;
-            opacity: 0.5;
-        }
-
         .main-container {
             display: flex;
             width: 100%;
@@ -2728,25 +2598,6 @@
                 </div>
             </div>
             <div class="settings-section">
-                <div class="settings-section-title">화면 모드</div>
-                <div class="settings-section-content device-mode-settings">
-                    <div class="settings-device-row">
-                        <div class="device-mode-label">PC / 모바일 보기 전환</div>
-                        <div class="device-toggle">
-                            <input type="checkbox" id="deviceModeToggle" role="switch" aria-checked="false" aria-label="PC와 모바일 보기 전환">
-                            <div class="device-toggle-track">
-                                <span class="device-toggle-option option-desktop">PC</span>
-                                <span class="device-toggle-option option-mobile">모바일</span>
-                            </div>
-                            <div class="device-toggle-thumb"></div>
-                        </div>
-                    </div>
-                    <div class="device-mode-caption">슬라이더가 파란색일 때는 모바일 모드예요.</div>
-                    <div class="device-mode-hint" id="deviceModeHint">현재 화면: 자동 감지 중</div>
-                    <button type="button" class="device-mode-reset" id="deviceModeReset" disabled>자동 감지 복원</button>
-                </div>
-            </div>
-            <div class="settings-section">
                 <div class="settings-section-title">코드 사용</div>
                 <div class="code-input-container">
                     <input type="text" id="codeInput" class="settings-input" placeholder="코드를 입력하세요">
@@ -2897,18 +2748,14 @@
 
         function detectMobileDevice() {
             const ua = navigator.userAgent || '';
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) || window.innerWidth <= MOBILE_BREAKPOINT;
+            const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+            const hasTouch = typeof navigator !== 'undefined' && (navigator.maxTouchPoints || 0) > 1;
+            const narrowViewport = Math.min(window.innerWidth, window.innerHeight) <= MOBILE_BREAKPOINT;
+            return isMobileUA || (hasTouch && narrowViewport);
         }
 
         function getPreferredLayoutMode() {
-            if (layoutOverride === 'mobile' || layoutOverride === 'desktop') {
-                return layoutOverride;
-            }
             return detectMobileDevice() ? 'mobile' : 'desktop';
-        }
-
-        function isManualLayoutOverride() {
-            return layoutOverride === 'mobile' || layoutOverride === 'desktop';
         }
 
         function applyResponsiveLayout() {
@@ -2938,7 +2785,6 @@
                 html.style.removeProperty('--app-layout-width');
                 html.style.removeProperty('--app-layout-height');
             }
-            updateLayoutToggleUI(targetMode);
         }
 
         function queueResponsiveLayout() {
@@ -2954,57 +2800,7 @@
         window.addEventListener('resize', queueResponsiveLayout);
         window.addEventListener('orientationchange', queueResponsiveLayout);
 
-        function updateLayoutToggleUI(targetMode = getPreferredLayoutMode()) {
-            const toggle = document.getElementById('deviceModeToggle');
-            const hint = document.getElementById('deviceModeHint');
-            const resetButton = document.getElementById('deviceModeReset');
-            const isMobile = targetMode === 'mobile';
-
-            if (toggle) {
-                if (toggle.checked !== isMobile) {
-                    toggle.checked = isMobile;
-                }
-                toggle.setAttribute('aria-checked', isMobile ? 'true' : 'false');
-            }
-
-            if (hint) {
-                const modeText = isMobile ? '모바일 모드' : 'PC 모드';
-                hint.textContent = isManualLayoutOverride()
-                    ? `현재 화면: ${modeText}`
-                    : `현재 화면: ${modeText} (자동 감지)`;
-            }
-
-            if (resetButton) {
-                resetButton.disabled = !isManualLayoutOverride();
-            }
-        }
-
-        function bindLayoutToggle() {
-            const toggle = document.getElementById('deviceModeToggle');
-            const resetButton = document.getElementById('deviceModeReset');
-
-            if (toggle) {
-                toggle.addEventListener('change', () => {
-                    layoutOverride = toggle.checked ? 'mobile' : 'desktop';
-                    updateLayoutToggleUI(layoutOverride);
-                    queueResponsiveLayout();
-                    saveState();
-                });
-            }
-
-            if (resetButton) {
-                resetButton.addEventListener('click', () => {
-                    layoutOverride = null;
-                    updateLayoutToggleUI();
-                    queueResponsiveLayout();
-                    saveState();
-                });
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            bindLayoutToggle();
-            updateLayoutToggleUI();
             applyResponsiveLayout();
             const hudPanel = document.getElementById('hudDrawerPanel');
             if (hudPanel) {
@@ -3254,7 +3050,6 @@
          let noCooldownCount = 0; // 주말 효과 카운터
          let nameChangedItems = []; // 이름이 바뀐 아이템들 (변환기 효과)
          let nameChangeTimer = null; // 이름 변경 효과 타이머
-        let layoutOverride = null; // 'mobile' | 'desktop' | null(자동)
 
         function getWeekendBuff() {
             return activeBuffs.find(buff => buff.type === 'weekend');
@@ -3757,7 +3552,6 @@
                      noCooldownCount,
                     nameChangedItems,
                     usedCodes,
-                    layoutOverride,
                     questState: getQuestStateSnapshot()
                 };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
@@ -3799,11 +3593,6 @@
                  if (Array.isArray(data.nameChangedItems)) nameChangedItems = data.nameChangedItems;
                 sanitizeThemeState();
                  if (Array.isArray(data.usedCodes)) usedCodes = data.usedCodes;
-                if (data.layoutOverride === 'mobile' || data.layoutOverride === 'desktop') {
-                    layoutOverride = data.layoutOverride;
-                } else {
-                    layoutOverride = null;
-                }
                 syncWeekendBuffState();
                 const buffStateChanged = initializeBuffIds();
                 if (data.questState) {
@@ -3826,7 +3615,6 @@
                 if (buffStateChanged) {
                     saveState();
                 }
-                updateLayoutToggleUI();
                 queueResponsiveLayout();
             } catch (e) { console.log('load failed'); }
         }
