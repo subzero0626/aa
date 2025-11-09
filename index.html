@@ -985,7 +985,7 @@
             color: #475569;
             transition: all 0.35s ease;
             box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
-            width: min(420px, 80vw);
+            width: min(420px, 100%);
         }
 
         .result-display.reset {
@@ -4003,6 +4003,8 @@
                 realProbabilityNum = baseProbabilityNum * 0.2 * (1 + specialEffectBonus);
             } else if (effectType === 'sparkling') {
                 realProbabilityNum = baseProbabilityNum * 0.05 * (1 + specialEffectBonus);
+            } else {
+                realProbabilityNum = baseProbabilityNum;
             }
             const realProbability = formatFiniteOrEllipsis(realProbabilityNum);
             // 레어도 갱신 (가장 낮은 실확률)
