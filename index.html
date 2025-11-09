@@ -21,15 +21,16 @@
             overflow: hidden;
         }
 
-        :root {
-            --app-layout-width: 100vw;
-            --app-layout-height: 100vh;
-        }
-
         #appLayoutRoot {
             position: relative;
             width: var(--app-layout-width, 100vw);
             height: var(--app-layout-height, 100vh);
+            margin: 0 auto;
+        }
+
+        :root {
+            --app-layout-width: 100vw;
+            --app-layout-height: 100vh;
         }
 
         body.is-mobile {
@@ -41,14 +42,16 @@
         body.is-mobile #appLayoutRoot {
             width: var(--app-layout-width);
             height: var(--app-layout-height);
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 9 / 16;
+            max-width: 100%;
+            max-height: 100%;
         }
 
         body.is-mobile #coinBuffContainer {
             position: absolute;
             top: 12px;
             right: 12px;
-            transform: scale(0.9);
+            transform: scale(0.8);
             transform-origin: top right;
         }
 
@@ -56,28 +59,37 @@
             position: absolute;
             top: 12px;
             left: 12px;
-            transform: scale(0.9);
+            transform: scale(0.8);
             transform-origin: top left;
         }
 
         body.is-mobile .navigation-dots {
             position: absolute;
             bottom: 12px;
+            transform: scale(0.85);
         }
 
         body.is-mobile #questOverlay {
             position: absolute;
             inset: 0;
+            padding: 12px;
         }
 
         body.is-mobile .screen {
-            padding: 14px;
+            padding: 10px;
         }
 
         body.is-mobile .container,
         body.is-mobile .shop-container {
-            max-height: calc(100% - 40px);
+            max-height: calc(100% - 28px);
+            width: 86%;
+            padding: 28px 24px;
             overflow-y: auto;
+        }
+
+        body.is-mobile .container h1,
+        body.is-mobile .shop-container h2 {
+            font-size: 1.4em;
         }
 
         .main-container {
@@ -2685,7 +2697,7 @@
     </div>
     </div>
   <script>
-        const TARGET_ASPECT_RATIO = 16 / 9;
+        const TARGET_ASPECT_RATIO = 9 / 16;
         const MOBILE_BREAKPOINT = 960;
         let layoutUpdateFrame = null;
 
@@ -2702,12 +2714,14 @@
             if (isMobile) {
                 const viewportWidth = window.innerWidth;
                 const viewportHeight = window.innerHeight;
-                const currentRatio = viewportWidth / viewportHeight;
-                let layoutWidth = viewportWidth;
-                if (currentRatio > TARGET_ASPECT_RATIO) {
-                    layoutWidth = viewportHeight * TARGET_ASPECT_RATIO;
+                const maxWidth = viewportWidth * 0.9;
+                const maxHeight = viewportHeight * 0.9;
+                let layoutHeight = Math.min(maxHeight, viewportWidth / TARGET_ASPECT_RATIO);
+                let layoutWidth = layoutHeight * TARGET_ASPECT_RATIO;
+                if (layoutWidth > maxWidth) {
+                    layoutWidth = maxWidth;
+                    layoutHeight = layoutWidth / TARGET_ASPECT_RATIO;
                 }
-                const layoutHeight = layoutWidth / TARGET_ASPECT_RATIO;
                 html.style.setProperty('--app-layout-width', `${layoutWidth}px`);
                 html.style.setProperty('--app-layout-height', `${layoutHeight}px`);
             } else {
