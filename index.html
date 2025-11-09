@@ -3148,6 +3148,7 @@
          let noCooldownCount = 0; // 주말 효과 카운터
          let nameChangedItems = []; // 이름이 바뀐 아이템들 (변환기 효과)
          let nameChangeTimer = null; // 이름 변경 효과 타이머
+        let claimedQuestIds = new Set();
 
         function getWeekendBuff() {
             return activeBuffs.find(buff => buff.type === 'weekend');
@@ -3391,7 +3392,8 @@
                     current: 0,
                     target: definition.target
                 },
-                completed: false
+                completed: false,
+                claimed: false
             };
         }
 
@@ -3650,6 +3652,7 @@
                      noCooldownCount,
                     nameChangedItems,
                     usedCodes,
+                    claimedQuestIds: Array.from(claimedQuestIds),
                     questState: getQuestStateSnapshot()
                 };
                 localStorage.setItem('sehorory_state_v1', JSON.stringify(data));
@@ -3691,6 +3694,11 @@
                  if (Array.isArray(data.nameChangedItems)) nameChangedItems = data.nameChangedItems;
                 sanitizeThemeState();
                  if (Array.isArray(data.usedCodes)) usedCodes = data.usedCodes;
+                if (Array.isArray(data.claimedQuestIds)) {
+                    claimedQuestIds = new Set(data.claimedQuestIds);
+                } else {
+                    claimedQuestIds = new Set();
+                }
                 syncWeekendBuffState();
                 const buffStateChanged = initializeBuffIds();
                 if (data.questState) {
@@ -5263,7 +5271,7 @@
                         target
                     },
                     completed: Boolean(quest && quest.completed),
-                    claimed: Boolean(quest && quest.claimed)
+                    claimed: Boolean(quest && quest.claimed) || (quest && quest.id && claimedQuestIds.has(quest.id))
                 };
             };
 
@@ -5274,6 +5282,15 @@
             questState.eventQuests = questState.eventQuests.map(quest =>
                 normalizeQuest(quest, 'event', '추후 공개될 이벤트 퀘스트입니다.')
             );
+
+            // ensure claimedQuestIds stays in sync with existing quests
+            const existingClaimedIds = new Set();
+            [...questState.dailyQuests, ...questState.eventQuests].forEach(quest => {
+                if (quest.claimed && quest.id) {
+                    existingClaimedIds.add(quest.id);
+                }
+            });
+            claimedQuestIds = existingClaimedIds;
         }
         function generateDailyQuests() {
             return sampleDailyQuestDefinitions(3).map(createDailyQuestFromDefinition);
@@ -5282,6 +5299,11 @@
             questState.lastDailyReset = anchorTime;
             questState.playtimeAnchorMs = getActivePlaytimeMs();
             questState.dailyQuests = generateDailyQuests();
+            const remainingClaimed = new Set();
+            questState.eventQuests
+                .filter(quest => quest && quest.claimed && quest.id)
+                .forEach(quest => remainingClaimed.add(quest.id));
+            claimedQuestIds = remainingClaimed;
             saveState();
             renderDailyQuests();
         }
@@ -5521,6 +5543,9 @@
             quest.selectedReward = reward;
             quest.reward = reward.label || quest.reward || '보상 미정';
             quest.claimed = true;
+            if (quest.id) {
+                claimedQuestIds.add(quest.id);
+            }
 
             applyQuestReward(reward);
             const rewardLabel = reward.label ||
