@@ -48,7 +48,7 @@
         }
 
         body.is-mobile #coinBuffContainer {
-            position: absolute;
+            position: fixed;
             top: 12px;
             right: 12px;
             transform: scale(0.8);
@@ -56,7 +56,7 @@
         }
 
         body.is-mobile #settingsPanel {
-            position: absolute;
+            position: fixed;
             top: 12px;
             left: 12px;
             transform: scale(0.8);
@@ -64,13 +64,13 @@
         }
 
         body.is-mobile .navigation-dots {
-            position: absolute;
+            position: fixed;
             bottom: 12px;
             transform: scale(0.85);
         }
 
         body.is-mobile #questOverlay {
-            position: absolute;
+            position: fixed;
             inset: 0;
             padding: 12px;
         }
@@ -114,8 +114,8 @@
 
         .device-toggle {
             position: relative;
-            width: 108px;
-            height: 38px;
+            width: 92px;
+            height: 34px;
         }
 
         .device-toggle input {
@@ -137,8 +137,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 14px;
-            font-size: 0.82em;
+            padding: 0 12px;
+            font-size: 0.78em;
             font-weight: 700;
             color: #475569;
             transition: background 0.25s ease, color 0.25s ease;
@@ -149,8 +149,8 @@
             position: absolute;
             top: 4px;
             left: 4px;
-            width: 50px;
-            height: 30px;
+            width: 42px;
+            height: 26px;
             border-radius: 999px;
             background: #ffffff;
             box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
@@ -187,12 +187,17 @@
         }
 
         .device-toggle input:checked ~ .device-toggle-thumb {
-            transform: translateX(50px);
+            transform: translateX(42px);
         }
 
         .device-mode-hint {
             font-size: 0.82em;
             color: #64748b;
+        }
+
+        .device-mode-caption {
+            font-size: 0.78em;
+            color: #5b6b85;
         }
 
         .device-mode-reset {
@@ -2692,6 +2697,7 @@
                             <div class="device-toggle-thumb"></div>
                         </div>
                     </div>
+                    <div class="device-mode-caption">슬라이더가 파란색일 때는 모바일 모드예요.</div>
                     <div class="device-mode-hint" id="deviceModeHint">현재 화면: 자동 감지 중</div>
                     <button type="button" class="device-mode-reset" id="deviceModeReset" disabled>자동 감지 복원</button>
                 </div>
