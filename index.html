@@ -175,9 +175,9 @@
         }
 
         body.is-mobile .navigation-dots {
-            top: 50%;
-            bottom: auto;
-            transform: translate(-50%, -50%);
+            top: auto;
+            bottom: 24px;
+            transform: translate(-50%, 0);
         }
 
         /* 세호코인 & 버프 UI (우측 상단) */
@@ -2249,13 +2249,13 @@
         .storage-item:hover .action-btn { display: block; }
         .storage-item:hover .enhance-info { display: block; }
 
-        #storageContent {
+        body.is-mobile #storageContent {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 14px;
         }
 
-        #storageContent .storage-item {
+        body.is-mobile #storageContent .storage-item {
             width: 100%;
             min-width: 0;
             padding: 12px 12px 28px;
@@ -2263,18 +2263,29 @@
             font-size: 0.78em;
         }
 
-        #storageContent .storage-item .storage-item-name {
+        body.is-mobile #storageContent .storage-item .storage-item-name {
             font-size: 1.1em;
         }
 
-        #storageContent .storage-item .action-btn {
+        body.is-mobile #storageContent .storage-item .action-btn {
             padding: 5px 10px;
             font-size: 1em;
         }
 
-        #storageContent .storage-item .count {
+        body.is-mobile #storageContent .storage-item .count {
             font-size: 0.95em;
             padding: 4px 10px;
+        }
+
+        body:not(.is-mobile) #storageContent {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        body:not(.is-mobile) #storageContent .storage-row {
+            display: flex;
+            gap: 15px;
         }
 
         /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
