@@ -174,6 +174,12 @@
             z-index: 1000;
         }
 
+        body.is-mobile .navigation-dots {
+            top: 50%;
+            bottom: auto;
+            transform: translate(-50%, -50%);
+        }
+
         /* 세호코인 & 버프 UI (우측 상단) */
         #questButton {
             position: relative;
@@ -928,6 +934,9 @@
             border-radius: 24px;
             border: 1px solid rgba(148, 163, 184, 0.25);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 24px 40px rgba(15, 23, 42, 0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .result-display {
@@ -1104,6 +1113,13 @@
         .confetti:nth-child(5n) {
             background: #96ceb4;
             animation-delay: 2s;
+        }
+
+        .draw-area .draw-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: min(280px, 100%);
         }
 
         .draw-button {
@@ -2232,6 +2248,34 @@
         /* 오버 시 컨트롤과 정보 표시 */
         .storage-item:hover .action-btn { display: block; }
         .storage-item:hover .enhance-info { display: block; }
+
+        #storageContent {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 14px;
+        }
+
+        #storageContent .storage-item {
+            width: 100%;
+            min-width: 0;
+            padding: 12px 12px 28px;
+            border-radius: 14px;
+            font-size: 0.78em;
+        }
+
+        #storageContent .storage-item .storage-item-name {
+            font-size: 1.1em;
+        }
+
+        #storageContent .storage-item .action-btn {
+            padding: 5px 10px;
+            font-size: 1em;
+        }
+
+        #storageContent .storage-item .count {
+            font-size: 0.95em;
+            padding: 4px 10px;
+        }
 
         /* 기본 마우스 오버 효과 제거 - 강화된 아이템만 효과 적용 */
 
@@ -5962,14 +6006,12 @@
             const diffY = startY - endY;
             
             if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 40) {
-                if (diffY < -40) {
-                    // 아래로 스와이프
-                    if (currentScreen === 3 && document.body.classList.contains('is-mobile')) {
+                if (document.body.classList.contains('is-mobile')) {
+                    if (diffY < -40) {
                         document.body.classList.add('hud-drawer-open');
+                    } else if (diffY > 40) {
+                        document.body.classList.remove('hud-drawer-open');
                     }
-                } else if (diffY > 40) {
-                    // 위로 스와이프
-                    document.body.classList.remove('hud-drawer-open');
                 }
                 startX = 0;
                 startY = 0;
