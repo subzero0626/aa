@@ -52,7 +52,6 @@
             position: fixed;
             top: 12px;
             right: 12px;
-            transform: scale(0.8);
             transform-origin: top right;
         }
 
@@ -60,7 +59,6 @@
             position: fixed;
             top: 12px;
             left: 12px;
-            transform: scale(0.8);
             transform-origin: top left;
         }
 
@@ -120,20 +118,54 @@
             pointer-events: auto;
         }
 
+        #hudSwipeHandle {
+            display: none;
+        }
+
+        body.is-mobile #hudSwipeHandle {
+            display: block;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 999px;
+            z-index: 2052;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        body.is-mobile.hud-drawer-open #hudSwipeHandle {
+            opacity: 0;
+            transform: translate(-50%, -12px);
+            pointer-events: none;
+        }
+
         body.is-mobile .hud-drawer-item {
+            --hud-scale: 0.8;
+            --hud-open-scale: var(--hud-scale);
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
         body.is-mobile:not(.hud-drawer-open) .hud-drawer-item {
-            transform: translateY(-160px);
+            transform: translateY(-160px) scale(var(--hud-scale));
             opacity: 0;
             pointer-events: none;
         }
 
         body.is-mobile.hud-drawer-open .hud-drawer-item {
-            transform: translateY(0);
+            transform: translateY(0) scale(var(--hud-open-scale));
             opacity: 1;
             pointer-events: auto;
+        }
+
+        body.is-mobile.hud-drawer-open #coinBuffContainer {
+            --hud-open-scale: 0.6;
+        }
+
+        body.is-mobile.hud-drawer-open #settingsPanel {
+            --hud-open-scale: 0.6;
         }
 
         .main-container {
@@ -953,6 +985,7 @@
             color: #475569;
             transition: all 0.35s ease;
             box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
+            width: min(420px, 100%);
         }
 
         .result-display.reset {
@@ -2277,6 +2310,15 @@
             padding: 4px 10px;
         }
 
+        body.is-mobile #storageContent .storage-item .enhance-stats {
+            bottom: 34px;
+            left: 12px;
+        }
+
+        body.is-mobile #storageContent .storage-item .enhance-info {
+            bottom: 64px;
+        }
+
         body:not(.is-mobile) #storageContent {
             display: flex;
             flex-direction: column;
@@ -2664,6 +2706,7 @@
         </div>
     </div>
     <div id="hudDrawerPanel" aria-hidden="true"></div>
+    <div id="hudSwipeHandle" aria-hidden="true"></div>
     <div class="main-container" id="mainContainer">
         <!-- 아이템 보관소 화면 (맨 왼쪽) -->
         <div class="screen storage-container item-storage-screen">
